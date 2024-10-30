@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -12,7 +11,7 @@ import (
 )
 
 func createTmpFile() (string, error) {
-	f, err := ioutil.TempFile("", "tmp")
+	f, err := os.CreateTemp("", "tmp")
 	if err == nil {
 		f.Close()
 		return f.Name(), err
@@ -27,7 +26,7 @@ func saveToTmpFile(b []byte) (string, error) {
 		return "", err
 	}
 
-	ioutil.WriteFile(f, b, os.ModePerm)
+	os.WriteFile(f, b, os.ModePerm)
 
 	return f, nil
 }
@@ -171,10 +170,10 @@ func TestToRegex(t *testing.T) {
 }
 
 func TestConfigWithInclude(t *testing.T) {
-	dir, _ := ioutil.TempDir("", "tmp")
+	dir, _ := os.MkdirTemp("", "tmp")
 
-	ioutil.WriteFile(filepath.Join(dir, "file1"), []byte("[program:cat]\ncommand=pwd\nA=abc\n[include]\nfiles=*.conf"), os.ModePerm)
-	ioutil.WriteFile(filepath.Join(dir, "file2.conf"), []byte("[program:ls]\ncommand=ls\n"), os.ModePerm)
+	os.WriteFile(filepath.Join(dir, "file1"), []byte("[program:cat]\ncommand=pwd\nA=abc\n[include]\nfiles=*.conf"), os.ModePerm)
+	os.WriteFile(filepath.Join(dir, "file2.conf"), []byte("[program:ls]\ncommand=ls\n"), os.ModePerm)
 
 	fmt.Println(filepath.Join(dir, "file1"))
 	config := NewConfig(filepath.Join(dir, "file1"))

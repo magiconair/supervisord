@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net"
 	"net/http"
 	"net/url"
@@ -48,7 +47,7 @@ var emptyReader io.ReadCloser
 
 func init() {
 	var buf bytes.Buffer
-	emptyReader = ioutil.NopCloser(&buf)
+	emptyReader = io.NopCloser(&buf)
 }
 
 // NewXMLRPCClient creates XMLRPCClient object

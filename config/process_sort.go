@@ -151,10 +151,7 @@ func (p *ProcessSorter) SortProgram(programConfigs []*Entry) []*Entry {
 	}
 
 	sort.Sort(ProgramByPriority(p.procsWithooutDepends))
-	for _, p := range p.procsWithooutDepends {
-		result = append(result, p)
-	}
-	return result
+	return append(result, p.procsWithooutDepends...)
 }
 
 /*func sortProcess(procs []*Process) []*Process {

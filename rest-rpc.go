@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -73,7 +73,7 @@ func (sr *SupervisorRestful) StartPrograms(w http.ResponseWriter, req *http.Requ
 	var b []byte
 	var err error
 
-	if b, err = ioutil.ReadAll(req.Body); err != nil {
+	if b, err = io.ReadAll(req.Body); err != nil {
 		w.WriteHeader(400)
 		w.Write([]byte("not a valid request"))
 		return
@@ -115,7 +115,7 @@ func (sr *SupervisorRestful) StopPrograms(w http.ResponseWriter, req *http.Reque
 	var programs []string
 	var b []byte
 	var err error
-	if b, err = ioutil.ReadAll(req.Body); err != nil {
+	if b, err = io.ReadAll(req.Body); err != nil {
 		w.WriteHeader(400)
 		w.Write([]byte("not a valid request"))
 		return
