@@ -1,14 +1,8 @@
-FROM golang:alpine AS builder
-
-RUN apk add --no-cache --update git gcc rust
-
-COPY . /src
+FROM golang:1.23-alpine AS builder
 WORKDIR /src
-
-RUN CGO_ENABLED=0 go build -a -ldflags "-linkmode external -extldflags -static" -o /usr/local/bin/supervisord github.com/ochinchina/supervisord
+COPY . ./
+RUN CGO_ENABLED=0 go build -tags release
 
 FROM scratch
-
-COPY --from=builder /usr/local/bin/supervisord /usr/local/bin/supervisord
-
+COPY --from=builder /src/supervisord /usr/local/bin/supervisord
 ENTRYPOINT ["/usr/local/bin/supervisord"]
